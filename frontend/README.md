@@ -1,4 +1,4 @@
-# Owensfield voting software (frontend)
+# Frontend
 
 ## Install the dependencies
 ```bash
