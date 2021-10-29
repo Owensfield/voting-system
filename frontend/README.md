@@ -1,6 +1,4 @@
-# Quasar App (frontend)
-
-A Quasar Framework app
+# Owensfield voting software (frontend)
 
 ## Install the dependencies
 ```bash
