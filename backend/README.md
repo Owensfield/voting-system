@@ -1,5 +1,4 @@
-# Agora
-Owensfeild voting software
+# Owensfeild voting software API
 
 ## Install
 
