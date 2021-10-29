@@ -1,1 +1,1 @@
-# Owensfeild voting software
+# Owensfeild voting system
