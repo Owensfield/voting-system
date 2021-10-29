@@ -1,2 +1,2 @@
-# agora
-voting software
+# Agora
+Owensfeild voting software
