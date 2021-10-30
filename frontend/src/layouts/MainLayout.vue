@@ -11,8 +11,6 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Owensfield voting system </q-toolbar-title>
-
         <div>v0.01</div>
 
         <q-btn
@@ -28,7 +26,7 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Menu </q-item-label>
+        <q-item-label header> Owensfield voting system </q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
