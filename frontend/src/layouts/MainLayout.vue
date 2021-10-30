@@ -23,22 +23,6 @@
           class="q-ma-md"
           @click="login = true"
         ></q-btn>
-        <q-btn
-          v-if="$q.dark.isActive"
-          flat
-          round
-          @click="toggleDarkMode()"
-          color="white"
-          icon="light_mode"
-        ></q-btn>
-        <q-btn
-          v-else
-          flat
-          round
-          @click="toggleDarkMode()"
-          color="white"
-          icon="dark_mode"
-        ></q-btn>
       </q-toolbar>
     </q-header>
 
@@ -93,8 +77,6 @@
   </q-layout>
 </template>
 
-
-
 <script>
 import EssentialLink from "components/EssentialLink.vue";
 
@@ -112,7 +94,6 @@ import { Dark } from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
-  darkMode: false,
 
   components: {
     EssentialLink,
@@ -130,19 +111,9 @@ export default defineComponent({
       },
     };
   },
-  methods: {
-    toggleDarkMode() {
-      this.darkMode = !this.darkMode;
-      Dark.set(this.darkMode);
-      window.localStorage.setItem("darkMode", this.darkMode);
-    },
-  },
+  methods: {},
   created() {
-    var mode = window.localStorage.getItem("darkMode");
-    if (mode == "true") {
-      Dark.set(true);
-      this.darkMode = true;
-    }
+    Dark.set(true);
   },
 });
 </script>
