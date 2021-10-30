@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Owensfield voting system </q-toolbar-title>
+        <q-toolbar-title> </q-toolbar-title>
 
         <div>v0.01</div>
 
