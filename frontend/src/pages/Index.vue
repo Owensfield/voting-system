@@ -1,13 +1,23 @@
 <template>
   <q-page>
     <q-btn
+      v-if="loggedIn"
       outline
       color="primary"
       label="Create a poll"
-      class="q-ma-md"
+      class="q-ma-sm"
       @click="createPoll()"
     ></q-btn>
-    <q-card class="my-card q-ma-md" style="width: 100%">
+    <q-btn
+      v-else
+      outline
+      disable
+      color="primary"
+      label="Create a poll"
+      class="q-ma-sm"
+      ><q-tooltip>Must be logged in</q-tooltip></q-btn
+    >
+    <q-card class="my-card q-ma-sm" style="width: 100%">
       <q-card-section>
         <div class="text-h6">Active Polls</div>
         <div class="text-subtitle2">Polls active that need votes</div>
@@ -15,7 +25,7 @@
       <q-card-section class="q-pt-none"> </q-card-section>
     </q-card>
 
-    <q-card class="my-card q-ma-md" style="width: 100%">
+    <q-card class="my-card q-ma-sm" style="width: 100%">
       <q-card-section>
         <div class="text-h6">Polls waiting for approval</div>
         <div class="text-subtitle2">
@@ -31,7 +41,11 @@
         <q-card-section> </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+          <q-form
+            @submit="onSubmitPoll"
+            @reset="onResetPoll"
+            class="q-gutter-md"
+          >
             <q-input
               filled
               v-model="name"
@@ -72,14 +86,16 @@ export default defineComponent({
   setup() {
     return {
       createPollDialogue: ref(false),
+      loggedIn: ref(false),
     };
   },
   methods: {
     createPoll() {
-      console.log("poo");
       this.createPollDialogue = true;
       console.log(this.createPollDialogue);
     },
+    onSubmitPoll() {},
+    onResetPoll() {},
   },
 });
 </script>
