@@ -140,9 +140,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
-        description: `A Quasar Framework app`,
+        name: `Owensfield voting system`,
+        short_name: `Owensfield voting system`,
+        description: `A voting system for Owensfield participants`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
