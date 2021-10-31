@@ -46,8 +46,8 @@ async def delete_user(user_id: str) -> None:
 ### Polls
 
 
-async def create_user(data: CreatePollData, inkey: Optional[str] = "") -> User:
-    user_id = urlsafe_short_hash()
+async def create_poll(data: CreatePollData, inkey: Optional[str] = "") -> User:
+    poll_id = urlsafe_short_hash()
     await db.execute(
         """
         INSERT INTO ovs.Users (
@@ -80,8 +80,8 @@ async def create_user(data: CreatePollData, inkey: Optional[str] = "") -> User:
     return await get_poll(poll_id)
 
 
-async def update_user(
-    data: CreatePollData, user_id: Optional[str] = ""
+async def update_poll(
+    data: CreatePollData, poll_id: Optional[str] = ""
 ) -> Optional[Polls]:
     q = ", ".join([f"{field[0]} = ?" for field in data])
     items = [f"{field[1]}" for field in data]
