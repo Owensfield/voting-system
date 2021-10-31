@@ -1,32 +1,43 @@
-from .db import Database
-
-db = Database("main")
+import sqlite3
 
 
-async def m001_initial(db):
-
-    await db.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS tipjar.TipJars (
-            id {db.serial_primary_key},
-            name TEXT NOT NULL,
-            wallet TEXT NOT NULL,
-            onchain TEXT,
-            webhook TEXT
-        );
-        """
+def migrate():
+    connection = sqlite3.connect("ovs.db")
+    cursor = connection.cursor()
+    # roll 1 normal, roll 2 steerer
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Users
+                  (id TEXT PRIMARY KEY,
+                  username TEXT, 
+                  hash TEXT,
+                  roll INT,
+                  timestamp TEXT)"""
+    )
+    # approvals
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Polls
+                  (id TEXT PRIMARY KEY,
+                  title TEXT, 
+                  opt1 TEXT, 
+                  opt2 TEXT, 
+                  opt3 TEXT, 
+                  opt4 TEXT, 
+                  opt5 TEXT, 
+                  approvals_csv TEXT,
+                  active INT,
+                  closing_date TEXT,
+                  timestamp TEXT)"""
     )
 
-    await db.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS tipjar.Tips (
-            id TEXT PRIMARY KEY,
-            wallet TEXT NOT NULL,
-            name TEXT NOT NULL,
-            message TEXT NOT NULL,
-            sats INT NOT NULL,
-            tipjar INT NOT NULL,
-            FOREIGN KEY(tipjar) REFERENCES {db.references_schema}TipJars(id)
-        );
-        """
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Votes
+                  (id TEXT PRIMARY KEY,
+                  poll_id TEXT, 
+                  user_id TEXT, 
+                  vote_opt INT,
+                  timestamp TEXT)"""
     )
+
+    connection.commit()
+    connection.close()
+    print("database built!")

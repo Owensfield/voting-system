@@ -1,8 +1,10 @@
 import uvicorn
 
 from fastapi import FastAPI
+from migrations import migrate
 
 ovs = FastAPI()
+migrate()
 
 
 @ovs.get("/{userHash}")
