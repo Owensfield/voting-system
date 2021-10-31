@@ -6,6 +6,6 @@
 
 `pipenv install uvicorn`
 
-`pipenv shell` 
+`pipenv shell`
 
-`uvicorn main:app --reload`
+`uvicorn api:ovs --reload`
