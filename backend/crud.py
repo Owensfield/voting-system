@@ -1,14 +1,20 @@
+from models import CreateUserData, CreatePollData, CreateVoteData
+from typing import Optional, Dict
+from typing import List, Optional, Union
+
 ### Users
 
 
-async def create_user(data: CreateUserData, inkey: Optional[str] = "") -> User:
+async def create_user(
+    data: CreateUserData, inkey: Optional[str] = ""
+) -> CreateUserData:
     user_id = urlsafe_short_hash()
     await db.execute(
         """
         INSERT INTO ovs.Users (
             id,
             username, 
-            hash,
+            user_hash,
             roll,
         )
         VALUES (?, ?, ?, ?)
@@ -20,23 +26,23 @@ async def create_user(data: CreateUserData, inkey: Optional[str] = "") -> User:
 
 async def update_user(
     data: CreateUserData, user_id: Optional[str] = ""
-) -> Optional[Users]:
+) -> Optional[CreateUserData]:
     q = ", ".join([f"{field[0]} = ?" for field in data])
     items = [f"{field[1]}" for field in data]
     items.append(user_id)
     await db.execute(f"UPDATE ovs.Users SET {q} WHERE id = ?", (items))
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (user_id,))
-    return Users(**row) if row else None
+    return CreateUserData(**row) if row else None
 
 
-async def get_user(user_id: str) -> Users:
+async def get_user(user_id: str) -> CreateUserData:
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (user_id,))
-    return Users(**row) if row else None
+    return CreateUserData(**row) if row else None
 
 
 async def get_users(user: str) -> List[Users]:
     rows = await db.fetchall("SELECT * FROM ovs.Users WHERE user = ?", (user,))
-    return [Users(**row) for row in rows]
+    return [CreateUserData(**row) for row in rows]
 
 
 async def delete_user(user_id: str) -> None:
@@ -108,7 +114,7 @@ async def delete_poll(poll_id: str) -> None:
 ### Votes
 
 
-async def create_vote(data: CreateUserData, inkey: Optional[str] = "") -> User:
+async def create_vote(data: CreateVoteData, inkey: Optional[str] = "") -> Votes:
     vote_id = urlsafe_short_hash()
     await db.execute(
         """
@@ -126,24 +132,24 @@ async def create_vote(data: CreateUserData, inkey: Optional[str] = "") -> User:
 
 
 async def update_vote(
-    data: CreateUserData, vote_id: Optional[str] = ""
-) -> Optional[Users]:
+    data: CreateVoteData, vote_id: Optional[str] = ""
+) -> Optional[Votes]:
     q = ", ".join([f"{field[0]} = ?" for field in data])
     items = [f"{field[1]}" for field in data]
     items.append(vote_id)
     await db.execute(f"UPDATE ovs.Users SET {q} WHERE id = ?", (items))
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (vote_id,))
-    return Users(**row) if row else None
+    return Votes(**row) if row else None
 
 
-async def get_vote(vote_id: str) -> Users:
+async def get_vote(vote_id: str) -> Votes:
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (vote_id,))
-    return Users(**row) if row else None
+    return Votes(**row) if row else None
 
 
-async def get_votes_poll(poll_id: str) -> List[Users]:
+async def get_votes_poll(poll_id: str) -> List[Votes]:
     rows = await db.fetchall("SELECT * FROM ovs.Users WHERE poll_id = ?", (poll_id,))
-    return [Users(**row) for row in rows]
+    return [Votes(**row) for row in rows]
 
 
 async def delete_vote(vote_id: str) -> None:
