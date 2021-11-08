@@ -16,7 +16,7 @@ from crud import (
     create_vote,
     update_vote,
     get_vote,
-    get_votes,
+    get_votes_poll,
     delete_vote,
 )
 
