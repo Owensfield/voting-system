@@ -9,6 +9,8 @@ Software will be:
 - Easy to use
 - Impossible to cheat
 
+Software client is available <a href="https://owensfield.github.io/voting-system/#/">here</a> (currently still in development)
+
 ## Workflow
 
 ### Creation
