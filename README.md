@@ -4,12 +4,15 @@ Polling software for web and mobile, used for voting and suggesting ideas regard
 
 Software will be:
 
-- Completely voluntary
+- Completely free and open-source
+- Voluntary
 - Anonymous
 - Easy to use
 - Impossible to cheat
 
 Software client is available <a href="https://owensfield.github.io/voting-system/#/">here</a> (currently still in development)
+
+Data will be stored in publicly accessable database
 
 ## Workflow
 
