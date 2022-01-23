@@ -16,13 +16,13 @@ Data will be stored in publicly accessable database
 
 ## Challenges
 
-To keep votes anonymous, the software only stores a <a href="https://en.wikipedia.org/wiki/Hash_function">hash</a> for verifying each user. The hash is created on the users device using a traditional `username` and `password` login system, but these details are not stored by the software.
+To keep votes anonymous, the software only stores a <a href="https://en.wikipedia.org/wiki/Hash_function">hash</a> for verifying each user. The hash is created on the users device through a traditional `username`/`password` login system, `username`/`password` are not stored by the software.
 
 Being `anonymous` means the data stored can be open, making it `hard to cheat` the system, but doing so creates some maintenance issues.
 
 > Someone claims to have lost their login details, how would the admin know which was their old account to delete?
 
-The easiest solution to this problem is deleting all user accounts every 12 months. So if a user loses their details, they will not be able to vote until the time when all accounts are reset, and they can generate a fresh account. For most users the reset experience would just be having to login with their account details again.
+The easiest solution to this problem is deleting all user accounts every 12 months. If a user loses their details, they will not be able to vote until the time when all accounts are reset, and they can generate a fresh account. For most users the reset experience would just be having to login with their details again.
 
 ## Workflow
 
