@@ -8,11 +8,21 @@ Software will be:
 - Voluntary
 - Anonymous
 - Easy to use
-- Impossible to cheat
+- Very hard to cheat
 
 Software client is available <a href="https://owensfield.github.io/voting-system/#/">here</a> (currently still in development)
 
 Data will be stored in publicly accessable database
+
+## Challenges
+
+To keep votes anonymous, the software only stores a <a href="https://en.wikipedia.org/wiki/Hash_function">hash</a> for verifying each user. The hash is created on the users device using a traditional `username` and `password` login system, but these details are not stored by the software.
+
+Being `anonymous` means the data stored can be open, making it `hard to cheat` the system, but doing so creates some maintenance issues.
+
+> Someone claims to have lost their login details, how would the admin know which was their old account to delete?
+
+The easiest solution to this problem is deleting all user accounts every 12 months. So if a user loses their details, they will not be able to vote until the time when all accounts are reset, and they can generate a fresh account. For most users the reset experience would just be having to login with their account details again.
 
 ## Workflow
 
@@ -36,6 +46,6 @@ Any user can suggest a poll. User fills out a form containing:
 - Users see a list of active polls in the app and can place their vote
 - Users see a list of all completed polls and results
 
-## Technicalities
+## User creation
 
-To keep votes anonymous, the software uses public-key cryptography (<a href="https://en.wikipedia.org/wiki/Schnorr_signature">schnorr</a> signature scheme). Each user has a private key and public key. The private key can be used to create poll and vote. The public key can be used to verify the created poll/vote has been submitted by a legitimate user. New users are created by 4/7 steering group submitting a request.
+New users are created by 4/7 steering group submitting a request.
