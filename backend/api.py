@@ -25,16 +25,10 @@ ovs = FastAPI()
 migrate()
 
 
-
-@ovs.get("/{userHash}")
-async def root():
-
-    return {"message": "Hello World"}
-
 @ovs.post("/login")
-async def root(userhash: str = Query(None)):
-    print(userhash)
-    return {"message": "Hello World"}
+async def root(userhash: str):
+
+    return {"userhash": userhash}
 
     
 
