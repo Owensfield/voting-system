@@ -8,12 +8,10 @@ def migrate():
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS Users
                   (id TEXT PRIMARY KEY,
-                  username TEXT, 
-                  hash TEXT,
                   roll INT,
                   timestamp TEXT)"""
     )
-    # approvals
+
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS Polls
                   (id TEXT PRIMARY KEY,
@@ -23,10 +21,16 @@ def migrate():
                   opt3 TEXT, 
                   opt4 TEXT, 
                   opt5 TEXT, 
-                  approvals_csv TEXT,
                   active INT,
                   closing_date TEXT,
                   timestamp TEXT)"""
+    )
+
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Approvals
+                  (id TEXT PRIMARY KEY,
+                  poll_id TEXT, 
+                  user_id TEXT)"""
     )
 
     cursor.execute(
@@ -37,6 +41,7 @@ def migrate():
                   vote_opt INT,
                   timestamp TEXT)"""
     )
+
 
     connection.commit()
     connection.close()

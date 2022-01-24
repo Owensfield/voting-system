@@ -31,7 +31,7 @@ class loginDetails(BaseModel):
 
 @ovs.post("/login")
 async def root(data: loginDetails):
-
+    get_user(data.userhash)
     return {"userhash": data.userhash}
 
     

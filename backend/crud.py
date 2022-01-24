@@ -35,8 +35,8 @@ async def update_user(
     return CreateUserData(**row) if row else None
 
 
-async def get_user(user_id: str) -> CreateUserData:
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (user_id,))
+async def get_user(userhash: str) -> CreateUserData:
+    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (userhash,))
     return CreateUserData(**row) if row else None
 
 
