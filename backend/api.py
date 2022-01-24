@@ -26,7 +26,7 @@ migrate()
 
 
 @ovs.post("/login")
-async def root(userhash: str):
+async def root(userhash: str = Query(...)):
 
     return {"userhash": userhash}
 
