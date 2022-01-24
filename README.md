@@ -1,4 +1,4 @@
-# Owensfeild voting system
+# Owensfield voting system
 
 Polling software for web and mobile, used for voting and suggesting ideas regarding Owensfield.
 
