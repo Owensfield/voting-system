@@ -10,7 +10,7 @@ Software will be:
 - Easy to use
 - Very hard to cheat
 
-Software client is available <a href="https://owensfield.github.io/voting-system/#/">here</a> (currently still in development)
+The voting system uses two pieces of software, a frontend available <a href="https://owensfield.github.io/voting-system/#/">here</a>, and a backend api available <a hre="https://owensfield.nostrfy.com/docs#/">here</a>. Both are currently in development.
 
 Data will be stored in publicly accessable database
 
