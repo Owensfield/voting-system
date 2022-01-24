@@ -12,7 +12,9 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
-    "quasar": "^2.0.0"
+    "cryptojs": "^2.5.3",
+    "quasar": "^2.0.0",
+    "vue-cryptojs": "^2.2.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",

@@ -52,7 +52,12 @@
 
         <q-card-section class="q-pt-none">
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-            <q-input filled type="number" v-model="loginForm.pin" label="Pin" />
+            <q-input
+              filled
+              type="text"
+              v-model="loginForm.username"
+              label="email"
+            />
             <q-input
               filled
               type="password"
@@ -84,6 +89,7 @@
 
 <script>
 import EssentialLink from "components/EssentialLink.vue";
+import CryptoJS from "crypto-js";
 
 const linksList = [
   {
@@ -120,13 +126,20 @@ export default defineComponent({
   },
   methods: {
     onSubmit() {
-      window.localStorage.setItem("userPin", this.loginForm.pin);
-      this.makeRequest("GET", "https://google.com");
-      window.localStorage.setItem("userHash", this.loginForm.hash);
+      var hash = CryptoJS.HmacSHA512(
+        this.loginForm.username,
+        this.loginForm.password
+      );
+      this.loginForm.userHash = CryptoJS.enc.Base64.stringify(hash);
+      console.log(this.loginForm);
+      this.makeRequest(
+        "POST",
+        "https://owensfield.nostrfy.com/login",
+        this.loginForm
+      );
+      window.localStorage.setItem("userHash", this.loginForm.userHash);
     },
-    onReset() {
-      console.log("yeah");
-    },
+    onReset() {},
     makeRequest(type, URL, data = null) {
       this.httpRequest = new XMLHttpRequest();
       if (!this.httpRequest) {
@@ -142,15 +155,22 @@ export default defineComponent({
         if (this.httpRequest.status === 200) {
           alert(this.httpRequest.responseText);
         } else {
-          alert("There was a problem with the request.");
+          alert("Backend server could not be reached");
         }
       }
     },
   },
   created() {
     Dark.set(true);
-    //  this.loginForm.pin = window.localStorage.getItem("userPin");
-    //  this.loginForm.hash = window.localStorage.getItem("userHash");
+    this.loginForm.userHash = window.localStorage.getItem("userHash");
+    console.log(this.loginForm.userHash);
+    if (this.loginForm.userHash) {
+      this.makeRequest(
+        "POST",
+        "https://owensfield.nostrfy.com/login",
+        this.loginForm
+      );
+    }
   },
 });
 </script>
