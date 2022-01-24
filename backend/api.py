@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import Request
+from pydantic import BaseModel
 from fastapi.param_functions import Query
 from fastapi import FastAPI
 from migrations import migrate
@@ -24,11 +25,14 @@ from crud import (
 ovs = FastAPI()
 migrate()
 
+class loginDetails(BaseModel):
+    userhash: str
+
 
 @ovs.post("/login")
-async def root(userhash: str = Query(...)):
+async def root(data: loginDetails):
 
-    return {"userhash": userhash}
+    return {"userhash": data.userhash}
 
     
 
