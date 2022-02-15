@@ -8,6 +8,7 @@ def migrate():
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS Users
                   (id TEXT PRIMARY KEY,
+                  email TEXT,
                   roll INT,
                   timestamp TEXT)"""
     )
@@ -15,6 +16,7 @@ def migrate():
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS Polls
                   (id TEXT PRIMARY KEY,
+                  signature TEXT,
                   title TEXT, 
                   opt1 TEXT, 
                   opt2 TEXT, 
@@ -33,15 +35,21 @@ def migrate():
                   user_id TEXT)"""
     )
 
+#Proof user has voted, so they cant vote again
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS Votes
+        """CREATE TABLE IF NOT EXISTS VoteCheck
                   (id TEXT PRIMARY KEY,
                   poll_id TEXT, 
-                  user_id TEXT, 
-                  vote_opt INT,
-                  timestamp TEXT)"""
+                  user_id TEXT)"""
     )
 
+#Hash of users email and password, so anon vote that can be counted
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Vote
+                  (id TEXT PRIMARY KEY,
+                  poll_id TEXT, 
+                  vote_opt INT)"""
+    )
 
     connection.commit()
     connection.close()

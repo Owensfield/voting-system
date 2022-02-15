@@ -7,13 +7,15 @@ from sqlite3 import Row
 
 
 class CreateUserData(BaseModel):
-    username: str = Query(None)
-    user_hash: str = Query(None)
+    id: str = Query(None)
+    email: str = Query(None)
     roll: int = Query(0)
 
 
 class CreatePollData(BaseModel):
+    id: str = Query(None)
     title: str = Query(None)
+    signature: str = Query(None)
     opt1: str = Query(None)
     opt2: str = Query(None)
     opt3: str = Query(None)
@@ -23,9 +25,20 @@ class CreatePollData(BaseModel):
     active: int = Query(0)
     closing_date: int = Query(0)
 
+class CreateVoteApprovalData(BaseModel):
+    id: str = Query(None)
+    poll_id: str = Query(None)
+    user_id: str = Query(None)
+
+class CreateVoteCheckData(BaseModel):
+    id: str = Query(None)
+    poll_id: str = Query(None)
+    user_id: str = Query(None)
+    vote_opt: int = Queary(0)
+    signature: str = Query(None)
+
 
 class CreateVoteData(BaseModel):
-    vote_id: str = Query(None)
-    user_id: str = Query(None)
+    id: str = Query(None)
+    poll_id: str = Query(None)
     vote_opt: str = Query(None)
-

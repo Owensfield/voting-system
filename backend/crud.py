@@ -1,4 +1,4 @@
-from models import CreateUserData, CreatePollData, CreateVoteData
+from models import CreateUserData, CreatePollData, CreateVoteData, CreateVoteApprovalData
 from typing import Optional, Dict
 from typing import List, Optional, Union
 
@@ -13,37 +13,22 @@ async def create_user(
         """
         INSERT INTO ovs.Users (
             id,
-            username, 
-            user_hash,
-            roll,
+            email, 
+            roll
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?)
         """,
-        (user_id, data.username, data.hash, data.roll),
+        (user_id, data.email, data.roll),
     )
     return await get_user(user_id)
-
-
-async def update_user(
-    data: CreateUserData, user_id: Optional[str] = ""
-) -> Optional[CreateUserData]:
-    q = ", ".join([f"{field[0]} = ?" for field in data])
-    items = [f"{field[1]}" for field in data]
-    items.append(user_id)
-    await db.execute(f"UPDATE ovs.Users SET {q} WHERE id = ?", (items))
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (user_id,))
-    return CreateUserData(**row) if row else None
-
 
 async def get_user(userhash: str) -> CreateUserData:
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (userhash,))
     return CreateUserData(**row) if row else None
 
-
 async def get_users(user: str) -> List[CreateUserData]:
-    rows = await db.fetchall("SELECT * FROM ovs.Users WHERE user = ?", (user,))
+    rows = await db.fetchall("SELECT * FROM ovs.Users", (user,))
     return [CreateUserData(**row) for row in rows]
-
 
 async def delete_user(user_id: str) -> None:
     await db.execute("DELETE FROM ovs.Users WHERE id = ?", (user_id,))
@@ -56,15 +41,15 @@ async def create_poll(data: CreatePollData, inkey: Optional[str] = "") -> Create
     poll_id = urlsafe_short_hash()
     await db.execute(
         """
-        INSERT INTO ovs.Users (
+        INSERT INTO ovs.Polls (
             id,
-            title, 
+            signature,
+            title,
             opt1 , 
             opt2, 
             opt3, 
             opt4, 
             opt5, 
-            approvals_csv,
             active,
             closing_date,
         )
@@ -72,85 +57,99 @@ async def create_poll(data: CreatePollData, inkey: Optional[str] = "") -> Create
         """,
         (
             poll_id,
+            data.signature,
             data.title,
             data.opt1,
             data.opt2,
             data.opt3,
             data.opt4,
             data.opt5,
-            data.approvals_csv,
             data.active,
             data.closing_date,
         ),
     )
     return await get_poll(poll_id)
 
-
-async def update_poll(
-    data: CreatePollData, poll_id: Optional[str] = ""
-) -> Optional[CreatePollData]:
-    q = ", ".join([f"{field[0]} = ?" for field in data])
-    items = [f"{field[1]}" for field in data]
-    items.append(poll_id)
-    await db.execute(f"UPDATE ovs.Users SET {q} WHERE id = ?", (items))
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (poll_id,))
-    return PolCreatePollDatals(**row) if row else None
-
-
 async def get_poll(poll_id: str) -> CreatePollData:
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (poll_id,))
+    row = await db.fetchone("SELECT * FROM ovs.Polls WHERE id = ?", (poll_id,))
     return CreatePollData(**row) if row else None
 
-
 async def get_polls(poll: str) -> List[CreatePollData]:
-    rows = await db.fetchall("SELECT * FROM ovs.Users WHERE poll = ?", (poll,))
+    rows = await db.fetchall("SELECT * FROM ovs.Polls", (poll,))
     return [CreatePollData(**row) for row in rows]
 
+# Needs signture of person who created poll
+async def delete_poll(signature: str) -> None:
+    await db.execute("DELETE FROM ovs.Polls WHERE signature = ?", (signature,))
 
-async def delete_poll(poll_id: str) -> None:
-    await db.execute("DELETE FROM ovs.Users WHERE id = ?", (poll_id,))
+
+### Approvals
+
+
+async def create_approval(data: CreateVoteApprovalData) -> CreateVoteApprovalData:
+    approval_id = urlsafe_short_hash()
+    await db.execute(
+        """
+        INSERT INTO ovs.Approvals (
+            id,
+            poll_id,
+            user_id,
+        )
+        VALUES (?, ?, ?)
+        """,
+        (
+            approval_id,
+            data.poll_id,
+            data.user_id,
+        ),
+    )
+    return await get_poll(poll_id)
+    
+async def check_approval(poll_id: str) -> CreateVoteApprovalData:
+    row = await db.fetchone("SELECT * FROM ovs.Approvals WHERE poll_id = ?", (poll_id,))
+    return CreateVoteApprovalData(**row) if row else None
 
 
 ### Votes
 
 
 async def create_vote(data: CreateVoteData, inkey: Optional[str] = "") -> CreateVoteData:
-    vote_id = urlsafe_short_hash()
+    checkApprovals = await check_approval(data.poll_id)
+    if len(checkApprovals) < 3:
+        return False
+    voteCheck = await check_vote(data.user_id)
+    if voteCheck:
+        return False
+    voteCheck_id = urlsafe_short_hash()
     await db.execute(
         """
-        INSERT INTO ovs.Users (
+        INSERT INTO ovs.VoteCheck (
             id,
-            vote_id, 
-            user_id, 
-            vote_opt,
+            poll_id, 
+            user_id
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?)
         """,
-        (user_id, data.vote_id, data.user_id, data.vote_opt),
+        (voteCheck_id, data.poll_id, data.user_id),
     )
-    return await get_vote(vote_id)
-
-
-async def update_vote(
-    data: CreateVoteData, vote_id: Optional[str] = ""
-) -> Optional[CreateVoteData]:
-    q = ", ".join([f"{field[0]} = ?" for field in data])
-    items = [f"{field[1]}" for field in data]
-    items.append(vote_id)
-    await db.execute(f"UPDATE ovs.Users SET {q} WHERE id = ?", (items))
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (vote_id,))
-    return CreateVoteData(**row) if row else None
+    await db.execute(
+        """
+        INSERT INTO ovs.Vote (
+            id,
+            poll_id,
+            vote_opt
+        )
+        VALUES (?, ?, ?)
+        """,
+        (data.signature, data.poll_id, data.vote_opt),
+    )
+    return await get_vote(data.signature)
 
 
 async def get_vote(vote_id: str) -> CreateVoteData:
-    row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (vote_id,))
+    row = await db.fetchone("SELECT * FROM ovs.VoteCheck WHERE id = ?", (vote_id,))
     return CreateVoteData(**row) if row else None
 
-
-async def get_votes_poll(poll_id: str) -> List[CreateVoteData]:
-    rows = await db.fetchall("SELECT * FROM ovs.Users WHERE poll_id = ?", (poll_id,))
-    return [CreateVoteData(**row) for row in rows]
-
-
-async def delete_vote(vote_id: str) -> None:
-    await db.execute("DELETE FROM ovs.Users WHERE id = ?", (vote_id,))
+async def check_vote(user_id: str) -> CreateVoteData:
+    row = await db.fetchone("SELECT * FROM ovs.VoteCheck WHERE user_id = ?", (user_id,))
+    return CreateVoteData(**row) if row else None
