@@ -26,8 +26,8 @@ async def get_user(userhash: str) -> CreateUserData:
     row = await db.fetchone("SELECT * FROM ovs.Users WHERE id = ?", (userhash,))
     return CreateUserData(**row) if row else None
 
-async def get_users(user: str) -> List[CreateUserData]:
-    rows = await db.fetchall("SELECT * FROM ovs.Users", (user,))
+async def get_users() -> List[CreateUserData]:
+    rows = await db.fetchall("SELECT * FROM ovs.Users")
     return [CreateUserData(**row) for row in rows]
 
 async def delete_user(user_id: str) -> None:
