@@ -1,20 +1,23 @@
 import sqlite3
+from db import Database
 
+db = Database("ovs")
 
 def migrate():
     connection = sqlite3.connect("ovs.db")
     cursor = connection.cursor()
     # roll 1 normal, roll 2 steerer
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS Users
+        f"""CREATE TABLE IF NOT EXISTS Users
                   (id TEXT PRIMARY KEY,
                   email TEXT,
+                  passhash TEXT,
                   roll INT,
-                  timestamp TEXT)"""
+                  timestamp TIMESTAMP NOT NULL DEFAULT {db.timestamp_now})"""
     )
 
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS Polls
+        f"""CREATE TABLE IF NOT EXISTS Polls
                   (id TEXT PRIMARY KEY,
                   signature TEXT,
                   title TEXT, 
@@ -25,7 +28,7 @@ def migrate():
                   opt5 TEXT, 
                   active INT,
                   closing_date TEXT,
-                  timestamp TEXT)"""
+                  timestamp TIMESTAMP NOT NULL DEFAULT {db.timestamp_now})"""
     )
 
     cursor.execute(

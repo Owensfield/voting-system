@@ -2,9 +2,7 @@
 
 ## Install
 
-`pipenv install fastapi`
-
-`pipenv install uvicorn`
+`pipenv install fastapi uvicorn sqlalchemy sqlalchemy_aio shortuuid`
 
 `pipenv shell`
 

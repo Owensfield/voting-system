@@ -9,6 +9,7 @@ from sqlite3 import Row
 class CreateUserData(BaseModel):
     id: str = Query(None)
     email: str = Query(None)
+    passhash: str = Query(None)
     roll: int = Query(0)
 
 
@@ -34,7 +35,7 @@ class CreateVoteCheckData(BaseModel):
     id: str = Query(None)
     poll_id: str = Query(None)
     user_id: str = Query(None)
-    vote_opt: int = Queary(0)
+    vote_opt: int = Query(0)
     signature: str = Query(None)
 
 
