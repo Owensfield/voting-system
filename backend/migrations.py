@@ -35,7 +35,7 @@ def migrate():
         """CREATE TABLE IF NOT EXISTS Approvals
                   (id TEXT PRIMARY KEY,
                   poll_id TEXT, 
-                  user_id TEXT)"""
+                  passhash TEXT)"""
     )
 
 #Proof user has voted, so they cant vote again

@@ -15,7 +15,10 @@ from crud import (
     delete_poll,
     create_vote,
     get_vote,
-    get_vote_poll,
+    check_votes,
+    get_votes_poll,
+    create_approval,
+    check_approvals,
 )
 from models import CreateUserData, CreateVoteData, CreatePollData, CreateVoteApprovalData
 
@@ -55,8 +58,8 @@ async def ovs_api_get_polls():
 
 # Needs signture of person who created poll
 @ovs.delete("/poll")
-async def ovs_api_delete_poll(signature: str):
-    return await delete_poll()
+async def ovs_api_delete_poll(signature: str, poll_id: str):
+    return await delete_poll(signature,poll_id)
 
 ### Approvals
 
@@ -64,9 +67,10 @@ async def ovs_api_delete_poll(signature: str):
 async def ovs_api_create_approval(data: CreateVoteApprovalData):
     return await create_approval(data)
 
-@ovs.post("/approval")
+@ovs.get("/approval")
 async def ovs_api_check_approval(poll_id: str) -> CreateVoteApprovalData:
-    return await check_approval(poll_id)
+    approvals = await check_approvals(poll_id)
+    return await approvals
 
 
 ### Votes
@@ -75,14 +79,17 @@ async def ovs_api_check_approval(poll_id: str) -> CreateVoteApprovalData:
 async def ovs_api_create_vote(data: CreateVoteData):
     return await create_vote(data)
 
-async def get_vote(vote_id: str) -> CreateVoteData:
+@ovs.get("/vote")
+async def ovs_api_get_vote(vote_id: str) -> CreateVoteData:
     return await get_vote(vote_id)
 
-async def get_vote_poll(poll_id: str) -> CreateVoteData:
-    return await get_vote_poll(poll_id)
+@ovs.get("/votes")
+async def ovs_api_get_votes_poll(poll_id: str) -> CreateVoteData:
+    return await get_votes_poll(poll_id)
 
-async def check_vote(user_id: str) -> CreateVoteData:
-    return await check_vote(vote_id)
+@ovs.get("/checkvotes")
+async def ovs_api_check_votes(user_id: str) -> CreateVoteData:
+    return await check_votes(vote_id)
 
 
 if __name__ == "__main__":
